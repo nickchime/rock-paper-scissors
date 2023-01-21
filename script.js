@@ -1,51 +1,14 @@
-
-function game(){
-    let draw = 0;
-    let win = 0;
-    let loss = 0;
-    for(let i = 0; i < 5; i++){
-        let result = playRound(playerSelection(window.prompt()),getComputerChoice());
-        if( result == 'You Win!'){
-            win = win+1;
-        }
-        else if(result== 'Looser!'){
-            loss = loss+1;
-        }
-        else {
-            draw = draw + 1;
-        }
-
-    }
-    if(win > loss){
-        return "You are the winner of the game!";
-    }
-    else if (loss > win){
-        return "You are the looser of the game!"
-    }
-    else{
-        return "The games is a tie"
-    }
-
-}
-
 function playRound(human, ai){
+    human = human.toLowerCase()
+    const container = document.querySelector('#results');
     if(human == ai){
-        console.log(human);
-        console.log(ai);
-        console.log('You tied this round');
-        return 'Draw';
+        return 'draw';
     }
     else if ( (human == 'rock' && ai == 'scissors') || (human == 'scissors' && ai == 'paper') || (human == 'paper' && ai == 'rock') ){
-        console.log(human);
-        console.log(ai);
-        console.log('You won this round!');
-        return 'You Win!';
+        return 'win';
     }
     else {
-        console.log(human);
-        console.log(ai);
-        console.log('You loss this round');
-        return 'Looser!';
+        return 'loss';
     }
 
 }
@@ -65,17 +28,59 @@ function getComputerChoice () {
     }
 }
 
-function playerSelection(x){
-    let playerInput = x.toLowerCase();
-    if(playerInput != 'rock' ||playerInput != 'paper' || playerInput != 'scissors'){
-        return playerInput;
-    }
-    else {
-        return console.log('user input is invalid');
-    }
+let w = 0;
+let l = 0;
+let d = 0;
 
+//trigger the game on a click
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        let result = playRound(button.id,getComputerChoice());
+        if(document.querySelectorAll('p') == true){
+            lossContainer.removeChild(win);
+            lossContainer.removeChild(loss);
+            lossContainer.removeChild(draw);
+        }
+        if(result === 'win'){
+            w++;
+            if(w==5){
+                const draw = document.createElement('p');
+                draw.textContent = `You are a winner with ${w} wins, ${l} loses and ${d} draws`;
+                container.appendChild(draw);
+            }
+            else {
+            const winContainer = document.querySelector('#Win');
+            const win = document.createElement('p');
+            win.textContent = `${w}`;
+            winContainer.appendChild(win);
+            return w;
+            }
+        }
+        else if(result === "loss"){
+            l++;
+            if(l==5){
+                const draw = document.createElement('p');
+                draw.textContent = `You are a LOSER with ${l} loses, ${w} wins and ${d} draws`;
+                container.appendChild(draw);
+            }
+            else {
+            const lossContainer = document.querySelector('#Loss');
+            const loss = document.createElement('p');
+            loss.textContent = `${l}`;
+            lossContainer.appendChild(loss);
+            return l;
+            }
+        }
+        else{
+            d++;
+            const drawContainer = document.querySelector('#Tie');
+            const draw = document.createElement('p');
+            draw.textContent = `${d}`;
+            drawContainer.appendChild(draw);
+            return d;
+        }
+        
+    })
+})
 
-}
-
-
-console.log(game())
